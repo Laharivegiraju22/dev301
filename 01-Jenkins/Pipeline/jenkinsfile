@@ -22,11 +22,8 @@ node {
    stage('Maven-Test') {
    sh label: '', script: 'mvn test'
   }
-  stage('Sonar Analysis'){
-	withSonarQubeEnv('SonarQube'){
-	sh 'mvn sonar:sonar'
-}
-}
+ 
+
    stage('Maven-Package') {
    sh label: '', script: 'mvn package'
   }
@@ -34,9 +31,12 @@ node {
    stage('Archive-Artifacts') {
    archiveArtifacts 'target/*.war'
   }
-   stage('Docker-Stage-Deployment') {
-   sh label: '', script: 'docker-compose up -d --build'
-  }
+  
+   stage('Sonar Analysis'){
+	withSonarQubeEnv('SonarQube'){
+	sh 'mvn sonar:sonar'
+	}
+}
 
 stage('Jfrog Artifacory Upload') {
 	def server= Artifactory.server 'Artifactory'
@@ -47,6 +47,12 @@ stage('Jfrog Artifacory Upload') {
 	}"""
 server.upload(uploadSpec)
 }
+
+   stage('Docker-Stage-Deployment') {
+   sh label: '', script: 'docker-compose up -d --build'
+  }
+
+
   stage('Geting Ready For Ansible') {
   sh label: 'Docker', script: 'cp -rf target/*.war ../../../04-Terraform/03-Ansible-Deploy/ansible/04-Tomcat/templates/'
   sh label: 'Jenkins', script: "echo '<h1> TASK BUILD ID: ${env.BUILD_DISPLAY_NAME}</h1>' > ../../../04-Terraform/03-Ansible-Deploy/ansible/04-Tomcat/templates/apps/index.html"
