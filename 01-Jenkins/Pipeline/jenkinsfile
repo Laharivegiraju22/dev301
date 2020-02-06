@@ -47,7 +47,9 @@ stage('Jfrog Artifacory Upload') {
 	}"""
 server.upload(uploadSpec)
 }
-
+stage('Deploy Approval') {
+                input('Do you want to proceed and deploy in production server?')           
+        }
    stage('Docker-Stage-Deployment') {
    sh label: '', script: 'docker-compose up -d --build'
   }
