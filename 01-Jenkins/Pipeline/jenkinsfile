@@ -83,10 +83,10 @@ dir(project_terra) {
 post 
     {  
         success {
-            mail bcc: '', body: 'project is successfully built', from: '', replyTo: '', subject: 'project successfully finished.', to: 'laharivegiraju@gmail.com'
+            mail bcc: '', body: 'project is successfully built', from: '', replyTo: '', subject: 'project successfully finished.', to: 'Sailahari.Vegiraju@mindtree.com'
         }
         failure {
-            mail bcc: '', body:"Failed stage name: ${Pipeline_Message}; This needs to be resolved... ${env.BUILD_URL} has result ${currentBuild.result}", from: '', replyTo: '', subject:"Status of pipeline: ${currentBuild.fullDisplayName}", to: 'laharivegiraju@gmail.com'
+            mail bcc: '', body:"Failed stage name: ${Pipeline_Message}; This needs to be resolved... ${env.BUILD_URL} has result ${currentBuild.result}", from: '', replyTo: '', subject:"Status of pipeline: ${currentBuild.fullDisplayName}", to: 'Sailahari.Vegiraju@mindtree.com'
         }
 	}
 }
