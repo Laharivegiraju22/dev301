@@ -79,14 +79,14 @@ dir(project_terra) {
    }
 }
 
-
+}
 post 
     {  
         success {
-            mail bcc: '', body: 'project is successfully built', from: '', replyTo: '', subject: 'project successfully finished.', to: 'Sailahari.Vegiraju@mindtree.com'
+            mail bcc: '', body: 'failed ', cc: '', from: '', replyTo: '', subject: 'build status', to: 'Sailahari.Vegiraju@mindtree.com'
         }
         failure {
-            mail bcc: '', body: 'project failed', from: '', replyTo: '', subject: 'project failed', to: 'Sailahari.Vegiraju@mindtree.com'
+           mail bcc: '', body: 'failed ', cc: '', from: '', replyTo: '', subject: 'build status', to: 'Sailahari.Vegiraju@mindtree.com'
         }
 	}
-}
+
