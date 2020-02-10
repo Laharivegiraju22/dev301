@@ -75,7 +75,20 @@ dir(project_terra) {
 }
 }
 
-
+post 
+    {  
+        always 
+        {  
+            echo 'This will always run'  
+        }
+        success {
+            mail bcc: '', body: 'project is successfully built', from: '', replyTo: '', subject: 'project successfully finished.', to: 'laharivegiraju@mindtree.com'
+        }
+        failure {
+            mail bcc: '', body:"body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+	<p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>"""", from: '', replyTo: '', subject:"${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'", to: 'laharivegiraju@mindtree.com'
+        }
+    }  
 
 #def notify(status){
     #emailext (
