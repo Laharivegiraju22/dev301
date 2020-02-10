@@ -1,7 +1,7 @@
+def Pipeline_Message
 node {
- try  {
- 
-stage('Git-Checkout') {
+ stage('Git-Checkout') {
+  Pipeline_Message=env.STAGE_NAME
    git 'https://github.com/Laharivegiraju22/ramya.git'
   }
     
@@ -10,33 +10,40 @@ stage('Git-Checkout') {
  dir(project_path) {
     
   stage('Maven-Clean') {
+  Pipeline_Message=env.STAGE_NAME
    sh label: '', script: 'mvn clean'
   }
     
  stage('Maven-Compile') {
+ Pipeline_Message=env.STAGE_NAME
    sh label: '', script: 'mvn compile'
   }
   
    stage('Maven-Test') {
+   Pipeline_Message=env.STAGE_NAME
    sh label: '', script: 'mvn test'
   }
  
 
    stage('Maven-Package') {
+   Pipeline_Message=env.STAGE_NAME
    sh label: '', script: 'mvn package'
   }
   
    stage('Archive-Artifacts') {
+   Pipeline_Message=env.STAGE_NAME
    archiveArtifacts 'target/*.war'
   }
   
    stage('Sonar Analysis'){
+Pipeline_Message=env.STAGE_NAME
 	withSonarQubeEnv('SonarQube'){
 	sh 'mvn sonar:sonar'
 	}
 }
 
 stage('Jfrog Artifacory Upload') {
+Pipeline_Message=env.STAGE_NAME
 	def server= Artifactory.server 'Artifactory'
 	def uploadSpec= """{
 	"files": [{
@@ -49,11 +56,13 @@ stage('Deploy Approval') {
                 input('Do you want to proceed and deploy in production server?')           
         }
    stage('Docker-Stage-Deployment') {
+   Pipeline_Message=env.STAGE_NAME
    sh label: '', script: 'docker-compose up -d --build'
   }
 
 
   stage('Geting Ready For Ansible') {
+  Pipeline_Message=env.STAGE_NAME
   sh label: 'Docker', script: 'cp -rf target/*.war ../../../04-Terraform/03-Ansible-Deploy/ansible/04-Tomcat/templates/'
   sh label: 'Jenkins', script: "echo '<h1> TASK BUILD ID: ${env.BUILD_DISPLAY_NAME}</h1>' > ../../../04-Terraform/03-Ansible-Deploy/ansible/04-Tomcat/templates/apps/index.html"
 }  
@@ -62,34 +71,22 @@ stage('Deploy Approval') {
 
 def project_terra="04-Terraform/03-Ansible-Deploy"
 dir(project_terra) {
+
    stage('Prod Deployment on AWS'){
+   Pipeline_Message=env.STAGE_NAME
    sh label: 'terraform', script: '/bin/terraform  init'
    sh label: 'terraform', script: '/bin/terraform  apply -input=false -auto-approve'
    }
-}
-
-
- catch (err) {
-  notify("Error ${err}")
-  currentBuild.result = 'FAILURE'
 }
 }
 
 post 
     {  
-        always 
-        {  
-            echo 'This will always run'  
-        }
         success {
-            mail bcc: '', body: 'project is successfully built', from: '', replyTo: '', subject: 'project successfully finished.', to: 'laharivegiraju@mindtree.com'
+            mail bcc: '', body: 'project is successfully built', from: '', replyTo: '', subject: 'project successfully finished.', to: 'laharivegiraju@gmail.com'
         }
         failure {
-            mail bcc: '', body:"body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-	<p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>"""", from: '', replyTo: '', subject:"${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'", to: 'laharivegiraju@mindtree.com'
+            mail bcc: '', body:"Failed stage name: ${Pipeline_Message}; This needs to be resolved... ${env.BUILD_URL} has result ${currentBuild.result}", from: '', replyTo: '', subject:"Status of pipeline: ${currentBuild.fullDisplayName}", to: 'laharivegiraju@gmail.com'
         }
-    }  
-
-
 	}
 
