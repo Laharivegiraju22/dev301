@@ -78,7 +78,7 @@ dir(project_terra) {
    sh label: 'terraform', script: '/bin/terraform  apply -input=false -auto-approve'
    }
 }
-}
+
 
 post 
     {  
@@ -89,4 +89,4 @@ post
             mail bcc: '', body:"Failed stage name: ${Pipeline_Message}; This needs to be resolved... ${env.BUILD_URL} has result ${currentBuild.result}", from: '', replyTo: '', subject:"Status of pipeline: ${currentBuild.fullDisplayName}", to: 'laharivegiraju@gmail.com'
         }
 	}
-
+}
