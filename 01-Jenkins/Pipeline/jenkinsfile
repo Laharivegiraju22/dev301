@@ -29,28 +29,6 @@ node {
    sh label: '', script: 'mvn package'
   }
   
-  // stage('Archive-Artifacts') {
-  
-   //archiveArtifacts 'target/*.war'
-  //}
-  
-   stage('Sonar Analysis'){
-
-	withSonarQubeEnv('SonarQube'){
-	sh 'mvn sonar:sonar'
-	}
-}
-
-stage('Jfrog Artifacory Upload') {
-
-	def server= Artifactory.server 'Artifactory'
-	def uploadSpec= """{
-	"files": [{
-	"pattern": "/root/.jenkins/workspace/Ramya/01-Jenkins/Code/petclinic/target/*.war",
-		"target": "petclinic"}]
-	}"""
-server.upload(uploadSpec)
-}
 stage('Deploy Approval') {
                 input('Do you want to proceed and deploy in production server?')           
         }
@@ -58,8 +36,7 @@ stage('Deploy Approval') {
    
    sh label: '', script: 'docker-compose up -d --build'
   }
-
-
+  
   stage('Geting Ready For Ansible') {
   
   sh label: 'Docker', script: 'cp -rf target/*.war ../../../04-Terraform/03-Ansible-Deploy/ansible/04-Tomcat/templates/'
