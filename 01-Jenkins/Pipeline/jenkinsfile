@@ -1,7 +1,7 @@
 node {
  stage('Git-Checkout') {
   
-   git 'https://github.com/Laharivegiraju22/ramya.git'
+   git 'https://github.com/Laharivegiraju22/multibranch-travel.git'
   }
     
  def project_path="01-Jenkins/Code/petclinic"
