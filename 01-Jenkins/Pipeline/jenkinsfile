@@ -47,5 +47,5 @@ stage('Jfrog Artifacory Upload') {
 server.upload(uploadSpec)
 }
 }
-
+}
 
