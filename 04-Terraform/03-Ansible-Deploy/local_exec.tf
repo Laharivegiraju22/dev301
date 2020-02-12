@@ -3,13 +3,8 @@ terraform {
     path = "/tmp/terraform/workspace/terraform.tfstate"
   }
 }
-provider "aws" {
-  region = "us-west-2"
-  
-}
-
 resource "aws_instance" "backend" {
-  ami                    = "${var.ami_id}"
+  ami                    = var.amis[var.region]
   instance_type          = "${var.instance_type}"
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${var.sg-id}"]
