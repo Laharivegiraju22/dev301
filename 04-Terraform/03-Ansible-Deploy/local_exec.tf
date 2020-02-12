@@ -4,6 +4,21 @@ terraform {
   }
 
 }
+resource "null_resource" "remote-exec-1" {
+    connection {
+    user        = "ubuntu"
+    type        = "ssh"
+    private_key = "${file(var.pvt_key)}"
+    host        = "${aws_instance.backend.public_ip}"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install python sshpass -y",
+    ]
+  }
+}
 resource "null_resource" "ansible-main" {
 provisioner "local-exec" {
   command = <<EOT
