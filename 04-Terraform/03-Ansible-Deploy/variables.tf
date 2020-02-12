@@ -7,7 +7,7 @@ variable "pvt_key" {
 }
 
 variable "host-ip" {
-default = " "  
+default = "54.200.62.143"  
   }
   
 variable "sg-id" {
