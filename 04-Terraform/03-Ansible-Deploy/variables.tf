@@ -6,13 +6,6 @@ variable "pvt_key" {
   default = "/root/.ssh/hkey.pem"
 }
 
-variable "amis" {
-  type = "map"
-  default = {
-   
-    "us-west-2" = "ami-02d0ea44ae3fe9561"
-  }
-}
 variable "instance_type"{
   default = "t2.micro"
   }
