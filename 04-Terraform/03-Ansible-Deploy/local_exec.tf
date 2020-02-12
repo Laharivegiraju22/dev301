@@ -9,7 +9,7 @@ resource "null_resource" "remote-exec-1" {
     user        = "ubuntu"
     type        = "ssh"
     private_key = "${file(var.pvt_key)}"
-    host        = "${aws_instance.backend.public_ip}"
+    host        = "${var.host-ip}"
   }
 
   provisioner "remote-exec" {
