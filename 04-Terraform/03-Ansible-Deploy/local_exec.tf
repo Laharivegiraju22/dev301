@@ -4,9 +4,9 @@ terraform {
   }
 }
 provider "aws" {
-  region = "${var.region}"
-
- }
+  region = "us-west-2"
+  
+}
 
 resource "aws_instance" "backend" {
   ami                    = "${var.ami_id}"
