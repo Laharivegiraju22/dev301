@@ -1,11 +1,9 @@
-terraform {
-  backend "local" {
-    path = "/tmp/terraform/workspace/terraform.tfstate"
-  }
+provider "aws" {
+  access_key = AWS_ACCESS_KEY_ID
+  secret_key = AWS_SECRET_ACCESS_KEY
+  region     = "us-west-2"
 }
-resource "aws_instance" "backend" {
-  ami                    = var.amis[var.region]
-  instance_type          = "${var.instance_type}"
-  key_name               = "${var.key_name}"
-  vpc_security_group_ids = ["${var.sg-id}"]
+resource "aws_instance" "example" {
+  ami           = var.amis[var.region]
+  instance_type = "t2.micro"
 }
